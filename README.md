@@ -1,1 +1,1 @@
-./start.sh para activar el ambiente virtual
+Hola :3
