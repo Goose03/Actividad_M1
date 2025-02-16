@@ -1,6 +1,7 @@
 Hola :3
 
-En updateRequirement.sh vaya poniendo los comandos de pip install que usen
+Para actualizar los requerimientos:
+pip install -r requirements.txt
 Asi nomas tenemos que ejecutar el archivo para instalar lo que hayan instalado :P
 
 Cada quien haga su branch porfis
