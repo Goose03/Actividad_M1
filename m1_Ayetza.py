@@ -38,11 +38,18 @@ class RobotLimpieza:
             self.habitacion.matriz[self.x][self.y] = 0  
     
     def next(self):
-        if self.estrategia == "vertical":
-            dx, dy = (random.choice([-1, 1]), 0)  
-        else:
-            dx, dy = (0, 0)  
+        direcciones = [(0,1), (0,-1), (1,0), (-1,0), (1,1), (-1,-1), (1,-1), (-1,1)]
         
+        if self.estrategia == "deteccion_suciedad":
+            for dx, dy in direcciones:
+                nuevo_x, nuevo_y = self.x + dx, self.y + dy
+                if 0 <= nuevo_x < self.habitacion.filas and 0 <= nuevo_y < self.habitacion.columnas:
+                    if self.habitacion.matriz[nuevo_x][nuevo_y] == 1:  
+                        self.x, self.y = nuevo_x, nuevo_y
+                        self.movimientos += 1
+                        return 
+            
+        dx, dy = random.choice(direcciones)
         nuevo_x, nuevo_y = self.x + dx, self.y + dy
         if 0 <= nuevo_x < self.habitacion.filas and 0 <= nuevo_y < self.habitacion.columnas:
             self.x, self.y = nuevo_x, nuevo_y
@@ -87,23 +94,23 @@ def graficar_resultados():
     df = pd.read_csv("resultados_simulacion.csv")
     plt.figure(figsize=(10, 5))
     
-    plt.scatter(df["Tiempo"], df["Porcentaje Limpieza"], label="Vertical")
+    plt.scatter(df["Tiempo"], df["Porcentaje Limpieza"], label="Detección de Suciedad")
     plt.plot(df["Tiempo"], df["Porcentaje Limpieza"], linestyle='--')
     plt.xlabel("Tiempo")
     plt.ylabel("Porcentaje de Limpieza")
-    plt.title("Tiempo vs Porcentaje de Limpieza (Vertical)")
+    plt.title("Tiempo vs Porcentaje de Limpieza (Detección de Suciedad)")
     plt.legend()
     
-    plt.scatter(df["Movimientos Totales"], df["Porcentaje Limpieza"], label="Vertical")
+    plt.scatter(df["Movimientos Totales"], df["Porcentaje Limpieza"], label="Detección de Suciedad")
     plt.plot(df["Movimientos Totales"], df["Porcentaje Limpieza"], linestyle='--')
     plt.xlabel("Movimientos Totales")
     plt.ylabel("Porcentaje de Limpieza")
-    plt.title("Movimientos vs Porcentaje de Limpieza (Vertical)")
+    plt.title("Movimientos vs Porcentaje de Limpieza (Detección de Suciedad)")
     plt.legend()
     
     plt.tight_layout()
     plt.show()
 
-estrategia = "vertical"
+estrategia = "deteccion_suciedad"
 ejecutar_experimentos(5, 10, 10, 3, 30, 100, estrategia)
 graficar_resultados()
