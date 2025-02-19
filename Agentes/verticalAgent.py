@@ -51,19 +51,24 @@ class VacuumSnakeModel(ap.Model):
         self.grid = ap.Grid(self, (self.p.x, self.p.y), track_empty=True)
         self.agents = ap.AgentList(self, self.p.agents, VacuumSnakeAgent)
         start_pos = (1, 1)
+
         self.grid.add_agents(self.agents, positions=[start_pos] * self.p.agents)
         self.grid.add_field('clean', values=np.full(self.grid.shape, False))
+
         total_cells = self.p.x * self.p.y
         num_dirty = int(total_cells * self.p.dirt_percentage)
         dirty_positions = np.random.choice(total_cells, num_dirty, replace=False)
         xs, ys = np.unravel_index(dirty_positions, self.grid.shape)
+
         for x, y in zip(xs, ys):
             self.grid.clean[(x, y)] = True
+
         self.dirty_remaining = num_dirty
         self.cleaning_progress = []
         self.steps_taken = 0
 
     def step(self):
+
         for agent in self.agents:
             if not agent.done:
                 cleaned_before = agent.cleaned
@@ -71,13 +76,16 @@ class VacuumSnakeModel(ap.Model):
                 cleaned_after = agent.cleaned
                 if cleaned_after > cleaned_before:
                     self.dirty_remaining -= (cleaned_after - cleaned_before)
+
         cleaned_total = (self.p.x * self.p.y) - self.dirty_remaining
         self.cleaning_progress.append(cleaned_total)
         self.steps_taken += 1
 
     def update(self):
+
         if self.dirty_remaining == 0:
             self.stop()
+
         if all(a.done for a in self.agents):
             self.stop()
 
@@ -94,6 +102,7 @@ def RunSimulation():
     fractions = [0.25, 0.50, 0.75, 1.00]
     labels = ['A', 'B', 'C', 'D']
     runs = {}
+    
     for frac, label in zip(fractions, labels):
         p = {
             'x': 10,
@@ -113,8 +122,10 @@ def RunSimulation():
         final_progress = model.end()
         runs[label] = final_progress
     plt.figure(figsize=(6, 4))
+
     for label, progress in runs.items():
         plt.plot(progress, label=f'Run {label}')
+
     plt.xlabel('Time Step')
     plt.ylabel('Cells Cleaned')
     plt.title('Vacuum Snake Cleaning Progress')
