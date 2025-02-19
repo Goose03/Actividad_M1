@@ -1,0 +1,6 @@
+Experimento,Estrategia,Tiempo,Porcentaje Limpieza,Movimientos Totales
+1,deteccion_suciedad,100,98.0,245
+2,deteccion_suciedad,68,100.0,173
+3,deteccion_suciedad,61,100.0,162
+4,deteccion_suciedad,89,100.0,236
+5,deteccion_suciedad,58,100.0,140
